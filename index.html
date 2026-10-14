@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="ApplyFlow - 基于 Codex 的求职投递 Agent 演示工作台" />
+    <title>ApplyFlow | 求职投递 Agent</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div class="brand">
+          <div class="brand-mark">A</div>
+          <div>
+            <strong>ApplyFlow</strong>
+            <span>求职投递 Agent</span>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="主要导航">
+          <button class="nav-item active" data-view="discover">
+            <span class="nav-icon">⌕</span>
+            今日推荐
+            <span class="nav-count">6</span>
+          </button>
+          <button class="nav-item" data-view="pipeline">
+            <span class="nav-icon">▦</span>
+            投递看板
+          </button>
+          <button class="nav-item" data-view="automation">
+            <span class="nav-icon">↻</span>
+            自动化记录
+          </button>
+          <button class="nav-item" data-view="preferences">
+            <span class="nav-icon">⚙</span>
+            求职偏好
+          </button>
+        </nav>
+
+        <div class="profile-card">
+          <div class="profile-avatar">JY</div>
+          <div>
+            <strong>候选人档案</strong>
+            <span>AI 产品 / 数据分析</span>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">JOB SEARCH AGENT</p>
+            <h1 id="page-title">今日岗位推荐</h1>
+          </div>
+          <div class="topbar-actions">
+            <span class="demo-label">演示数据</span>
+            <button class="button secondary" id="run-agent">运行一次 Agent</button>
+          </div>
+        </header>
+
+        <section class="view active" id="discover-view">
+          <div class="stats-grid">
+            <article class="stat-card">
+              <span>今日新增</span>
+              <strong>18</strong>
+              <small>来自 7 个信息源</small>
+            </article>
+            <article class="stat-card">
+              <span>待你确认</span>
+              <strong id="pending-stat">6</strong>
+              <small>已完成硬条件筛选</small>
+            </article>
+            <article class="stat-card">
+              <span>本周已投递</span>
+              <strong>12</strong>
+              <small>其中 4 份定制简历</small>
+            </article>
+            <article class="stat-card warning-card">
+              <span>需要跟进</span>
+              <strong>3</strong>
+              <small>超过 14 天未更新</small>
+            </article>
+          </div>
+
+          <div class="agent-strip">
+            <div class="agent-icon">✦</div>
+            <div>
+              <strong>Agent 已完成今日筛选</strong>
+              <p>读取 126 个岗位，去重 31 个，排除 77 个不满足毕业时间或地点要求的岗位，推荐 18 个。</p>
+            </div>
+            <div class="agent-meta">
+              <span class="status-dot"></span>
+              最近运行：09:30
+            </div>
+          </div>
+
+          <section class="panel job-panel">
+            <div class="panel-header">
+              <div>
+                <h2>待确认岗位</h2>
+                <p>Agent 根据经历证据、岗位偏好与历史反馈给出匹配判断</p>
+              </div>
+              <div class="filters">
+                <button class="filter-chip active">全部</button>
+                <button class="filter-chip">AI 产品</button>
+                <button class="filter-chip">产品经理</button>
+                <button class="filter-chip">数据分析</button>
+              </div>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="check-cell"><input type="checkbox" id="select-all" aria-label="全选岗位" /></th>
+                    <th>公司与岗位</th>
+                    <th>方向</th>
+                    <th>匹配度</th>
+                    <th>推荐理由</th>
+                    <th>截止时间</th>
+                    <th>决策</th>
+                  </tr>
+                </thead>
+                <tbody id="job-table-body"></tbody>
+              </table>
+            </div>
+
+            <div class="bulk-bar">
+              <span>已选择 <strong id="selected-count">0</strong> 个岗位</span>
+              <div>
+                <button class="button ghost" id="reject-selected">舍弃</button>
+                <button class="button primary" id="apply-selected">加入待投递</button>
+              </div>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="pipeline-view">
+          <div class="section-intro">
+            <div>
+              <h2>申请流水线</h2>
+              <p>从简历适配到面试节点，集中查看每份申请的下一步动作。</p>
+            </div>
+            <button class="button primary" id="new-application">+ 新建申请</button>
+          </div>
+          <div class="kanban" id="kanban"></div>
+        </section>
+
+        <section class="view" id="automation-view">
+          <div class="automation-layout">
+            <section class="panel">
+              <div class="panel-header compact">
+                <div>
+                  <h2>自动化任务</h2>
+                  <p>保留人工确认节点，其余重复动作交给 Agent。</p>
+                </div>
+              </div>
+              <div class="automation-list" id="automation-list"></div>
+            </section>
+            <aside class="panel flow-panel">
+              <h2>工作流</h2>
+              <div class="flow-step done"><span>1</span><div><strong>发现岗位</strong><small>增量读取、去重、硬条件筛选</small></div></div>
+              <div class="flow-line"></div>
+              <div class="flow-step done"><span>2</span><div><strong>匹配评估</strong><small>经历证据 + 偏好 + 历史反馈</small></div></div>
+              <div class="flow-line"></div>
+              <div class="flow-step active"><span>3</span><div><strong>人工确认</strong><small>批量选择待投递或舍弃</small></div></div>
+              <div class="flow-line"></div>
+              <div class="flow-step"><span>4</span><div><strong>申请执行</strong><small>简历 Diff、浏览器辅助、状态回写</small></div></div>
+              <div class="flow-line"></div>
+              <div class="flow-step"><span>5</span><div><strong>持续跟进</strong><small>状态检查、截止与面试提醒</small></div></div>
+            </aside>
+          </div>
+        </section>
+
+        <section class="view" id="preferences-view">
+          <section class="panel preferences-panel">
+            <div class="panel-header compact">
+              <div>
+                <h2>求职偏好</h2>
+                <p>这些条件会影响岗位匹配与后续推荐排序。</p>
+              </div>
+              <button class="button primary" id="save-preferences">保存偏好</button>
+            </div>
+            <div class="preference-grid">
+              <label>目标方向<input value="AI 产品经理、产品经理、数据分析" /></label>
+              <label>毕业时间<input value="2027 年应届毕业" /></label>
+              <label>优先城市<input value="上海、深圳、杭州、北京" /></label>
+              <label>排除条件<input value="仅限理工科硕士、纯销售岗位" /></label>
+            </div>
+            <label class="feedback-label">推荐反馈偏好<textarea>更偏好能够结合数据分析、用户研究与 AI 应用的岗位；对行业不设硬性限制，但优先考虑业务复杂度较高、能参与完整产品流程的团队。</textarea></label>
+          </section>
+        </section>
+      </main>
+    </div>
+
+    <div class="modal-backdrop" id="resume-modal" aria-hidden="true">
+      <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">RESUME ADAPTATION</p>
+            <h2 id="modal-title">简历修改 Diff</h2>
+          </div>
+          <button class="icon-button" id="close-modal" aria-label="关闭">×</button>
+        </div>
+        <div class="resume-summary">
+          <span>推荐版本：<strong>PM 简历</strong></span>
+          <span>JD 关键词：<strong>AI 应用 / A/B 测试 / 跨团队协作</strong></span>
+        </div>
+        <div class="diff-grid">
+          <div class="diff-card before">
+            <span>修改前</span>
+            <p>Skills: SQL, Python, Excel, PowerPoint</p>
+          </div>
+          <div class="diff-card after">
+            <span>修改后</span>
+            <p>Skills: SQL, Python, Excel; A/B Testing, Data Analysis, AI-assisted Prototyping</p>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="button ghost" id="browser-task">创建浏览器辅助任务</button>
+          <button class="button primary" id="confirm-resume">确认并导出 PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ApplyFlow 作品说明</title>
+    <style>
+      @page { size: Letter; margin: 0; }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        color: #111;
+        background: #fff;
+        font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+      .page {
+        width: 8.5in;
+        min-height: 11in;
+        padding: 0.46in 0.58in 0.42in;
+        page-break-after: always;
+      }
+      .page:last-child { page-break-after: auto; }
+      h1 { margin: 0 0 14px; font-size: 29px; line-height: 1.15; }
+      h2 { margin: 17px 0 8px; font-size: 18px; }
+      p, li { font-size: 11px; line-height: 1.55; color: #363636; }
+      a { color: #0088df; text-decoration: none; }
+      .meta { margin-bottom: 17px; font-size: 11px; line-height: 1.55; color: #444; }
+      .intro { margin-bottom: 10px; }
+      ol, ul { margin: 0; padding-left: 24px; }
+      .screenshot {
+        width: 92%;
+        margin: 13px auto 6px;
+        border: 1px solid #e3e3e3;
+        display: block;
+      }
+      .caption { margin: 0; color: #888; font-size: 9px; }
+      .stack li { margin-bottom: 3px; }
+      .flow {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 7px;
+        margin-top: 8px;
+      }
+      .flow div {
+        padding: 8px 6px;
+        border: 1px solid #dedee4;
+        border-radius: 6px;
+        background: #f8f8fa;
+        font-size: 10px;
+        font-weight: 700;
+        text-align: center;
+      }
+      .note {
+        margin-top: 12px;
+        padding: 8px 10px;
+        border-left: 3px solid #6557d9;
+        background: #f6f4ff;
+        color: #555064;
+        font-size: 10px;
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="page">
+      <h1>ApplyFlow｜求职投递 Agent（作品集）</h1>
+      <div class="meta">
+        GitHub: <a href="https://github.com/jameyxujingyi/job-search-agent">https://github.com/jameyxujingyi/job-search-agent</a>
+      </div>
+
+      <h2>一句话介绍产品</h2>
+      <p class="intro">面向校招求职者的网页端工作台：由 Agent 完成岗位发现、匹配判断和重复申请任务，用户只在岗位决策与最终提交等关键节点进行确认。</p>
+
+      <h2>产品核心功能</h2>
+      <ol>
+        <li><strong>岗位发现与推荐：</strong>增量整理多源岗位，完成去重与硬条件筛选，结合候选人经历、求职偏好和历史反馈输出匹配度与推荐理由。</li>
+        <li><strong>申请自动化：</strong>对确认投递的岗位生成简历修改 Diff，衔接浏览器辅助填写并同步投递结果；定期检查长期未更新的申请与后续节点。</li>
+      </ol>
+
+      <img class="screenshot" src="../assets/applyflow-dashboard.png" alt="ApplyFlow 主界面" />
+      <p class="caption">主界面：Agent 推荐结果、匹配理由、截止时间与批量决策</p>
+
+      <h2>工作流结构</h2>
+      <div class="flow">
+        <div>发现岗位</div>
+        <div>匹配评估</div>
+        <div>人工确认</div>
+        <div>申请执行</div>
+        <div>持续跟进</div>
+      </div>
+
+      <h2>技术栈</h2>
+      <ul class="stack">
+        <li><strong>前端：</strong>HTML + CSS + JavaScript，完成岗位推荐、批量决策、申请看板与自动化任务交互。</li>
+        <li><strong>Agent：</strong>Codex 负责任务拆解、岗位匹配、反馈更新、简历适配与浏览器任务编排。</li>
+        <li><strong>数据与执行：</strong>飞书承载结构化记录与进度同步；浏览器操作辅助网申与状态检查。</li>
+      </ul>
+
+      <div class="note">本版本为产品结构 Demo，使用演示数据，不连接真实招聘网站、个人账号或简历文件。</div>
+    </section>
+  </body>
+</html>
